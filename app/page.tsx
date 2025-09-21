@@ -7,7 +7,8 @@ import { TestimonialsSection } from "@/components/testimonials";
 import { Footer } from "@/components/footer";
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background">
+    
+    <div className="min-h-screen bg-background"> 
       <Header />
       <main>
         <HeroSection />
@@ -18,5 +19,5 @@ export default function Home() {
       </main>
       <Footer />
     </div>
-  ) 
+  )
 }
