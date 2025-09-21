@@ -1,28 +1,63 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent } from "@/components/ui/card"
-import { Brain, Eye, EyeOff, Mail, Lock, User, Sparkles, Heart, Star } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Brain,
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Sparkles,
+  Heart,
+  Star,
+} from "lucide-react";
+import Link from "next/link";
+import { registerUser } from "@/lib/api/auth";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    console.log("Form submitted with data ", username, email, password); // Debugging line
+    e.preventDefault();
+    setError("");
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await registerUser(username, email, password);
+      console.log("Registration successful");
+      router.push("/auth/login");
+    } catch (err: any) {
+      setError(err.message || "Failed to register. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
     // Simulate loading
-    setTimeout(() => setIsLoading(false), 2000)
-  }
+    // setTimeout(() => setIsLoading(false), 2000);
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -38,7 +73,11 @@ export function SignUpForm() {
                 "linear-gradient(45deg, #8B5CF6, #0D9488, #3B82F6)",
               ],
             }}
-            transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute inset-0"
           />
 
@@ -49,7 +88,11 @@ export function SignUpForm() {
               y: [-40, 40, -40],
               rotate: [0, 360],
             }}
-            transition={{ duration: 18, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 18,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-teal-500/20 to-blue-500/20 rounded-full blur-2xl"
           />
 
@@ -59,20 +102,32 @@ export function SignUpForm() {
               y: [40, -40, 40],
               scale: [1, 1.3, 1],
             }}
-            transition={{ duration: 22, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 22,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-r from-purple-500/20 to-teal-500/20 rounded-full blur-3xl"
           />
 
           {/* Cosmic Elements */}
           <motion.div
             animate={{ rotate: [0, 360] }}
-            transition={{ duration: 30, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 30,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
             className="absolute top-1/3 left-1/3 w-64 h-64 border border-white/10 rounded-full"
           />
 
           <motion.div
             animate={{ rotate: [360, 0] }}
-            transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 25,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
             className="absolute bottom-1/3 right-1/3 w-48 h-48 border border-white/5 rounded-full"
           />
         </div>
@@ -94,19 +149,25 @@ export function SignUpForm() {
               <br />
               Wellness
               <br />
-              <span className="bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">Journey</span>
+              <span className="bg-gradient-to-r from-teal-300 to-blue-300 bg-clip-text text-transparent">
+                Journey
+              </span>
             </h1>
 
             <p className="text-xl text-blue-100 leading-relaxed max-w-md">
-              Join thousands who have found peace and growth with MindfulAI. Your personalized mental health companion
-              awaits.
+              Join thousands who have found peace and growth with MindfulAI.
+              Your personalized mental health companion awaits.
             </p>
 
             {/* Floating Wellness Icons */}
             <div className="flex items-center space-x-6 pt-4">
               <motion.div
                 animate={{ y: [-8, 8, -8], rotate: [0, 180, 360] }}
-                transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                transition={{
+                  duration: 5,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
                 className="w-10 h-10 bg-teal-400 rounded-full flex items-center justify-center"
               >
                 <Sparkles className="w-5 h-5 text-teal-900" />
@@ -114,7 +175,11 @@ export function SignUpForm() {
 
               <motion.div
                 animate={{ y: [8, -8, 8], scale: [1, 1.2, 1] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
                 className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center"
               >
                 <Heart className="w-5 h-5 text-blue-900 fill-current" />
@@ -122,7 +187,11 @@ export function SignUpForm() {
 
               <motion.div
                 animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
-                transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                transition={{
+                  duration: 6,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "linear",
+                }}
                 className="w-10 h-10 bg-purple-400 rounded-full flex items-center justify-center"
               >
                 <Star className="w-5 h-5 text-purple-900 fill-current" />
@@ -137,10 +206,12 @@ export function SignUpForm() {
               className="mt-8 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10"
             >
               <p className="text-sm text-blue-100 italic">
-                "MindfulAI helped me find balance in my chaotic life. The AI companion truly understands and supports
-                me."
+                "MindfulAI helped me find balance in my chaotic life. The AI
+                companion truly understands and supports me."
               </p>
-              <p className="text-xs text-blue-200 mt-2">- Sarah, MindfulAI User</p>
+              <p className="text-xs text-blue-200 mt-2">
+                - Sarah, MindfulAI User
+              </p>
             </motion.div>
           </motion.div>
         </div>
@@ -161,21 +232,32 @@ export function SignUpForm() {
                 <div className="flex items-center justify-center mb-4">
                   <motion.div
                     animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                    transition={{
+                      duration: 8,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    }}
                     className="w-12 h-12 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full flex items-center justify-center"
                   >
                     <Brain className="w-6 h-6 text-white" />
                   </motion.div>
                 </div>
 
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Join MindfulAI</h2>
-                <p className="text-gray-600 dark:text-gray-300">Create your account and begin your wellness journey</p>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  Join MindfulAI
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Create your account and begin your wellness journey
+                </p>
               </div>
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="fullName"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Full Name
                   </Label>
                   <div className="relative">
@@ -186,12 +268,17 @@ export function SignUpForm() {
                       placeholder="Enter your full name"
                       className="pl-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-teal-500 dark:focus:border-teal-400"
                       required
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Email
                   </Label>
                   <div className="relative">
@@ -202,12 +289,17 @@ export function SignUpForm() {
                       placeholder="Enter your email"
                       className="pl-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-teal-500 dark:focus:border-teal-400"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Password
                   </Label>
                   <div className="relative">
@@ -218,6 +310,8 @@ export function SignUpForm() {
                       placeholder="Create a password"
                       className="pl-10 pr-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-teal-500 dark:focus:border-teal-400"
                       required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button
                       type="button"
@@ -236,7 +330,10 @@ export function SignUpForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="confirmPassword"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Confirm Password
                   </Label>
                   <div className="relative">
@@ -247,13 +344,17 @@ export function SignUpForm() {
                       placeholder="Confirm your password"
                       className="pl-10 pr-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-teal-500 dark:focus:border-teal-400"
                       required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="w-4 h-4 text-gray-400" />
@@ -266,13 +367,22 @@ export function SignUpForm() {
 
                 <div className="flex items-start space-x-2">
                   <Checkbox id="terms" className="mt-1" />
-                  <Label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <Label
+                    htmlFor="terms"
+                    className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed"
+                  >
                     I agree to the{" "}
-                    <Link href="/terms" className="text-teal-600 dark:text-teal-400 hover:underline">
+                    <Link
+                      href="/terms"
+                      className="text-teal-600 dark:text-teal-400 hover:underline"
+                    >
                       Terms of Service
                     </Link>{" "}
                     and{" "}
-                    <Link href="/privacy" className="text-teal-600 dark:text-teal-400 hover:underline">
+                    <Link
+                      href="/privacy"
+                      className="text-teal-600 dark:text-teal-400 hover:underline"
+                    >
                       Privacy Policy
                     </Link>
                   </Label>
@@ -286,7 +396,11 @@ export function SignUpForm() {
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     />
                   ) : (
@@ -299,7 +413,9 @@ export function SignUpForm() {
                     <div className="w-full border-t border-gray-300 dark:border-gray-600" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">
+                      Or continue with
+                    </span>
                   </div>
                 </div>
 
@@ -333,7 +449,10 @@ export function SignUpForm() {
               <div className="text-center mt-6">
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   Already have an account?{" "}
-                  <Link href="/auth/sign-in" className="text-teal-600 dark:text-teal-400 hover:underline font-medium">
+                  <Link
+                    href="/auth/sign-in"
+                    className="text-teal-600 dark:text-teal-400 hover:underline font-medium"
+                  >
                     Sign In
                   </Link>
                 </p>
@@ -343,5 +462,5 @@ export function SignUpForm() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }
