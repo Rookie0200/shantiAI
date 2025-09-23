@@ -1,21 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Menu, X, Brain } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Menu, X, Brain } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="mx-auto px-8 2xl:max-w-[1400px] flex h-16 items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-500">
             <Brain className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-900 dark:text-white">MindfulAI</span>
+          <span className="text-xl font-bold text-gray-900 dark:text-white">
+            MindfulAI
+          </span>
         </div>
 
         {/* Desktop Navigation */}
@@ -52,15 +56,27 @@ export function Header() {
             <Button
               variant="outline"
               size="sm"
-              className="border-gray-900 dark:border-white text-gray-900 dark:text-white hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 rounded-full px-6 bg-transparent"
+              className="border-gray-900 dark:border-white text-gray-900 dark:text-white hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 rounded-full px-6 bg-transparent cursor-pointer"
+              onClick={() => {
+                router.push("/dashboard");
+              }}
             >
               GET STARTED →
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <Button variant="ghost" size="sm" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>
@@ -106,5 +122,5 @@ export function Header() {
         </div>
       )}
     </header>
-  )
+  );
 }

@@ -1,3 +1,4 @@
+"use client";
 import axios from "axios";
 export async function registerUser(
   username: string,
@@ -27,6 +28,8 @@ export async function loginUser(email: string, password: string) {
       headers: { "Content-Type": "application/json" },
     }
   );
+  console.log("loginUser response data:", res.data);
+  console.log("loginUser status:", res.data.success);
   if (!res.data.success) {
     const error = await res.data.error;
     throw new Error(error.message || "Login failed");

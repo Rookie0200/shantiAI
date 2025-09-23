@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Brain, MessageCircle, Target, Heart, Sparkles, Clock, Award, Zap } from "lucide-react"
 import { useSession } from "@/lib/contexts/session"
 
-export function OverviewTab() {
+export default function OverviewTab() {
   const { user } = useSession()
   return (
     <div className="space-y-6">

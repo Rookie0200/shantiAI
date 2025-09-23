@@ -6,7 +6,7 @@ import axios from "axios";
 
 interface User {
   _id: string;
-  name: string;
+  username: string;
   email: string;
 }
 
@@ -28,6 +28,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const checkSession = async () => {
     try {
       const token = localStorage.getItem("token");
+      console.log("SessionContext: Checking session with token:", token);
       console.log(
         "SessionContext: Token from localStorage:",
         token ? "exists" : "not found"
@@ -46,7 +47,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         },
       });
 
-      console.log("SessionContext: Response status:", response.status);
+      console.log("SessionContext: Response :", response);
+      console.log("SessionContext: Response status:", response.data.success);
 
       if (response.data.success) {
         const data = await response.data;

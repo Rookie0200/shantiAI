@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="bg-card border-t border-border">
       {/* Main Footer Content */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto px-8 2xl:max-w-[1400px] sm:px-6 lg:px-8 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
@@ -68,7 +68,7 @@ export function Footer() {
 
       {/* CTA Section */}
       <div className="border-t border-border bg-gradient-to-r from-primary/5 to-secondary/5">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className=" mx-auto px-8 2xl:max-w-[1400px] sm:px-6 lg:px-8 py-12">
           <div className="text-center space-y-6">
             <div className="space-y-2">
               <h3 className="text-2xl font-bold font-poppins">

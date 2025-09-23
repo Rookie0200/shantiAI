@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const API_URL = process.env.API_URL || "http://localhost:8000";
   const token = req.headers.get("Authorization");
+  console.log("GET /api/auth/me called with token:", token);
 
   if (!token) {
     return NextResponse.json({ message: "No token provided" }, { status: 401 });
@@ -15,6 +16,8 @@ export async function GET(req: NextRequest) {
         Authorization: token,
       },
     });
+    console.log("Response from backend /api/auth/me:", res.data);
+    console.log("Response status:", res.data.success);
 
     if (!res.data.success) {
       return NextResponse.json(
@@ -24,6 +27,7 @@ export async function GET(req: NextRequest) {
     }
 
     const data = res.data;
+    console.log("User data fetched successfully:", data);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

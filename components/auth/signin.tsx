@@ -1,27 +1,57 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent } from "@/components/ui/card"
-import { Brain, Eye, EyeOff, Mail, Lock, Sparkles, Heart } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import { Brain, Eye, EyeOff, Mail, Lock, Sparkles, Heart } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/lib/api/auth";
+import { useSession } from "@/lib/contexts/session";
 
 export function SignInForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { checkSession } = useSession();
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    console.log("Form submitted with data ", email, password); // Debugging line
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+    // if (password !== confirmPassword) {
+    //   setError("Passwords do not match");
+    //   return;
+    // }
+
+
+    try {
+      const response = await loginUser(email, password);
+      console.log("Login successful with response:", response);
+      localStorage.setItem("token", response.sessionToken);
+      await checkSession();
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      router.push("/dashboard/therapy");
+    } catch (err: any) {
+      setError(err.message || "Failed to login User. Please try again.");
+    } finally {
+      setIsLoading(false);
+
+    }
     // Simulate loading
-    setTimeout(() => setIsLoading(false), 2000)
-  }
+    // setTimeout(() => setIsLoading(false), 2000)
+  };
 
   return (
     <div className="min-h-screen flex">
@@ -37,7 +67,11 @@ export function SignInForm() {
                 "linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899)",
               ],
             }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute inset-0"
           />
 
@@ -48,7 +82,11 @@ export function SignInForm() {
               y: [-50, 50, -50],
               rotate: [0, 180, 360],
             }}
-            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 20,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-pink-500/30 to-purple-500/30 rounded-full blur-3xl"
           />
 
@@ -58,7 +96,11 @@ export function SignInForm() {
               y: [50, -50, 50],
               rotate: [360, 180, 0],
             }}
-            transition={{ duration: 25, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 25,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-blue-500/30 to-pink-500/30 rounded-full blur-3xl"
           />
 
@@ -68,7 +110,11 @@ export function SignInForm() {
               y: [100, -100, 100],
               scale: [1, 1.2, 1],
             }}
-            transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            transition={{
+              duration: 15,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-2xl"
           />
         </div>
@@ -96,15 +142,19 @@ export function SignInForm() {
             </h1>
 
             <p className="text-xl text-purple-100 leading-relaxed max-w-md">
-              Your mental wellness journey starts here. Connect with Luna, your AI companion, and discover a path to
-              emotional balance and growth.
+              Your mental wellness journey starts here. Connect with Luna, your
+              AI companion, and discover a path to emotional balance and growth.
             </p>
 
             {/* Floating Elements */}
             <div className="flex items-center space-x-4 pt-4">
               <motion.div
                 animate={{ y: [-5, 5, -5], rotate: [0, 180, 360] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
                 className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center"
               >
                 <Sparkles className="w-4 h-4 text-yellow-900" />
@@ -112,7 +162,11 @@ export function SignInForm() {
 
               <motion.div
                 animate={{ y: [5, -5, 5], scale: [1, 1.1, 1] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
                 className="w-8 h-8 bg-pink-400 rounded-full flex items-center justify-center"
               >
                 <Heart className="w-4 h-4 text-pink-900 fill-current" />
@@ -120,7 +174,11 @@ export function SignInForm() {
 
               <motion.div
                 animate={{ rotate: [0, 360] }}
-                transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                transition={{
+                  duration: 8,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "linear",
+                }}
                 className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center"
               >
                 <Brain className="w-4 h-4 text-blue-900" />
@@ -148,7 +206,9 @@ export function SignInForm() {
                   </div>
                 </div>
 
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome Back</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  Welcome Back
+                </h2>
                 <p className="text-gray-600 dark:text-gray-300">
                   Enter your credentials to access your mindful journey
                 </p>
@@ -157,7 +217,10 @@ export function SignInForm() {
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Email
                   </Label>
                   <div className="relative">
@@ -168,12 +231,17 @@ export function SignInForm() {
                       placeholder="Enter your email"
                       className="pl-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Password
                   </Label>
                   <div className="relative">
@@ -184,6 +252,8 @@ export function SignInForm() {
                       placeholder="Enter your password"
                       className="pl-10 pr-10 h-12 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400"
                       required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button
                       type="button"
@@ -204,7 +274,10 @@ export function SignInForm() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <Checkbox id="remember" />
-                    <Label htmlFor="remember" className="text-sm text-gray-600 dark:text-gray-300">
+                    <Label
+                      htmlFor="remember"
+                      className="text-sm text-gray-600 dark:text-gray-300"
+                    >
                       Remember me
                     </Label>
                   </div>
@@ -215,7 +288,11 @@ export function SignInForm() {
                     Forgot Password?
                   </Link>
                 </div>
-
+                {error && (
+                  <p className="text-sm text-red-600 dark:text-red-400">
+                    {error}
+                  </p>
+                )}
                 <Button
                   type="submit"
                   className="w-full h-12 bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-semibold rounded-lg transition-all duration-300"
@@ -224,7 +301,11 @@ export function SignInForm() {
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{
+                        duration: 1,
+                        repeat: Number.POSITIVE_INFINITY,
+                        ease: "linear",
+                      }}
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                     />
                   ) : (
@@ -237,7 +318,9 @@ export function SignInForm() {
                     <div className="w-full border-t border-gray-300 dark:border-gray-600" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">Or continue with</span>
+                    <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">
+                      Or continue with
+                    </span>
                   </div>
                 </div>
 
@@ -271,7 +354,10 @@ export function SignInForm() {
               <div className="text-center mt-6">
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   Don't have an account?{" "}
-                  <Link href="/auth/sign-up" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+                  <Link
+                    href="/auth/sign-up"
+                    className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                  >
                     Sign Up
                   </Link>
                 </p>
@@ -281,5 +367,5 @@ export function SignInForm() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }

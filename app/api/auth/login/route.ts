@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
         },
       }
     );
+    console.log("Login response:", response.data);
     return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     return NextResponse.json(

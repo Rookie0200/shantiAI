@@ -49,11 +49,12 @@ export function SignUpForm() {
     try {
       await registerUser(username, email, password);
       console.log("Registration successful");
-      router.push("/auth/login");
     } catch (err: any) {
       setError(err.message || "Failed to register. Please try again.");
     } finally {
       setIsLoading(false);
+
+      router.push("/auth/login");
     }
     // Simulate loading
     // setTimeout(() => setIsLoading(false), 2000);
@@ -387,7 +388,11 @@ export function SignUpForm() {
                     </Link>
                   </Label>
                 </div>
-
+                {error && (
+                  <p className="text-sm text-red-600 dark:text-red-400">
+                    {error}
+                  </p>
+                )}
                 <Button
                   type="submit"
                   className="w-full h-12 bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-300"

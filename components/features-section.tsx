@@ -60,7 +60,7 @@ export function FeaturesSection() {
 
   return (
     <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
-      <div className="container mx-auto max-w-7xl">
+      <div className="mx-auto px-8 2xl:max-w-[1400px] max-w-7xl">
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <Brain className="h-4 w-4 mr-2" />

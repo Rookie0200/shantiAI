@@ -11,7 +11,7 @@ import { SessionsTab } from "./tabs/sessions-tab"
 import { CrisisTab } from "./tabs/crisis-tab"
 import { CommunityTab } from "./tabs/community-tab"
 import { ResourcesTab } from "./tabs/resources-tab"
-import { SettingsTab } from "./tabs/settings-tab"
+// import { SettingsTab } from "./tabs/settings-tab"
 
 interface DashboardContentProps {
   activeTab: string
@@ -42,8 +42,8 @@ export function DashboardContent({ activeTab }: DashboardContentProps) {
         return <CommunityTab />
       case "resources":
         return <ResourcesTab />
-      case "settings":
-        return <SettingsTab />
+      // case "settings":
+      //   return <SettingsTab />
       default:
         return <OverviewTab />
     }
